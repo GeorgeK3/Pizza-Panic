@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bju346171i8at"]
+
+[ext_resource type="PackedScene" uid="uid://d2lwteap0h55i" path="res://scenes/enemies/burger_enemies/small_enemy/small_enemy.tscn" id="1_npt3b"]
+
+[node name="Small_Enemy" type="Node2D"]
+
+[node name="SmallEnemy" parent="." instance=ExtResource("1_npt3b")]

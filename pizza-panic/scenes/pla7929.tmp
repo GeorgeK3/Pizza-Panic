@@ -1,0 +1,241 @@
+[gd_scene load_steps=22 format=3 uid="uid://bhpx5t0uvd065"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_p2rcf"]
+[ext_resource type="Texture2D" uid="uid://mn8gq88r42sq" path="res://props/red_screen.png" id="3_40vgb"]
+[ext_resource type="Texture2D" uid="uid://b2wvqsc3pbp6g" path="res://props/ChefSheet -Idle_0.png" id="3_ybu3f"]
+[ext_resource type="Texture2D" uid="uid://dcmx05d2i5r75" path="res://props/ChefSheet - Aim.png" id="3_yyvui"]
+[ext_resource type="Texture2D" uid="uid://c7ggg5xj5oby1" path="res://props/ChefSheet - Walking_0.png" id="4_5cjbh"]
+[ext_resource type="Texture2D" uid="uid://1fnr8mwvc07b" path="res://props/ChefSheet -Idle_1.png" id="4_52bxl"]
+[ext_resource type="PackedScene" uid="uid://cxswrlguolfr8" path="res://scenes/pizza_bow.tscn" id="4_g3nvv"]
+[ext_resource type="Texture2D" uid="uid://dp28mkwunm2mm" path="res://props/ChefSheet - Jump.png" id="4_qqfmw"]
+[ext_resource type="AudioStream" uid="uid://dgx4v62dnskrj" path="res://music/game_over.mp3" id="5_8spdh"]
+[ext_resource type="Texture2D" uid="uid://doepvwecerg36" path="res://props/ChefSheet - Walking_1.png" id="5_t7iom"]
+[ext_resource type="Texture2D" uid="uid://03nset7p4y8y" path="res://props/ChefSheet - Walking_2.png" id="6_pcq7x"]
+[ext_resource type="Texture2D" uid="uid://c3frd7k4fyvy5" path="res://props/ChefSheet - Walking_3.png" id="7_8wxqq"]
+[ext_resource type="Script" path="res://scenes/health_bar.gd" id="8_ymoqd"]
+[ext_resource type="Texture2D" uid="uid://b88rcc52uhxt8" path="res://props/ChefSheet - Fall.png" id="9_tiphp"]
+[ext_resource type="PackedScene" uid="uid://budkskvtsddp2" path="res://scenes/pizza_bullet.tscn" id="15_jw1be"]
+
+[sub_resource type="GDScript" id="GDScript_ooi0l"]
+script/source = "extends Camera2D
+
+@onready var timer_shake_length = $TimerShakeLength
+@onready var timer_wait_times = $TimerWaitTimes
+@onready var flash_image = $FlashSprite
+
+var reset_speed = 0
+var strength = 0
+var doing_shake = false
+var rng = RandomNumberGenerator.new()
+
+func _ready():
+	# Connect timer signal timeouts
+	timer_wait_times.timeout.connect(_on_timer_wait_times_timeout)
+	timer_shake_length.timeout.connect(_on_timer_shake_length_timeout)
+
+# Stop the shake and reset the camera's offset
+func _on_timer_shake_length_timeout():
+	doing_shake = false
+	reset_camera()
+
+# Perform the tween shake during intervals
+func _on_timer_wait_times_timeout():
+	if doing_shake:
+		var tween_shake = create_tween()
+		tween_shake.parallel().tween_property(
+			self,
+			\"offset\",
+			Vector2(rng.randf_range(-strength, strength), rng.randf_range(-strength, strength)),
+			reset_speed
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+		tween_shake.play()
+
+# Reset the camera's offset smoothly after shaking
+func reset_camera():
+	var tween_shake = create_tween()
+	tween_shake.tween_property(
+		self,
+		\"offset\",
+		Vector2.ZERO,
+		reset_speed
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween_shake.play()
+
+# Start the shake with specified parameters
+func start_shake(time_of_shake, speed_of_shake, strength_of_shake):
+	doing_shake = true
+	strength = strength_of_shake
+	reset_speed = speed_of_shake
+	timer_shake_length.start(time_of_shake)
+	timer_wait_times.start(speed_of_shake)
+
+# Start a flash effect by tweening the alpha channel of `flash_image`
+func start_flash(speed, strength):
+	var tween_flash = create_tween()
+
+	# Fade alpha up
+	tween_flash.set_speed_scale(speed)
+	tween_flash.tween_property(
+		flash_image,
+		\"modulate:a\",
+		0.0,
+		strength,
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+
+	# Wait for the duration and fade alpha down
+	tween_flash.set_speed_scale(speed)
+	tween_flash.parallel().tween_property(
+		flash_image,
+		\"modulate:a\",
+		strength,
+		0.0
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+
+	tween_flash.play()
+"
+
+[sub_resource type="GDScript" id="GDScript_hj644"]
+script/source = "extends Sprite2D
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gbxf3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_yyvui")
+}],
+"loop": true,
+"name": &"aim",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_tiphp")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ybu3f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_52bxl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_qqfmw")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_5cjbh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_t7iom")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pcq7x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_8wxqq")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4a666"]
+size = Vector2(26.0156, 48.9374)
+
+[sub_resource type="GDScript" id="GDScript_rvhuh"]
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14ew1"]
+size = Vector2(70.9189, 150.222)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_p2rcf")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -154)
+script = SubResource("GDScript_ooi0l")
+
+[node name="FlashSprite" type="Sprite2D" parent="Camera2D"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(2, 0)
+scale = Vector2(-4.40295, 4.28926)
+texture = ExtResource("3_40vgb")
+script = SubResource("GDScript_hj644")
+
+[node name="TimerShakeLength" type="Timer" parent="Camera2D"]
+one_shot = true
+
+[node name="TimerWaitTimes" type="Timer" parent="Camera2D"]
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(-0.119568, -73)
+scale = Vector2(0.572852, 0.509752)
+sprite_frames = SubResource("SpriteFrames_gbxf3")
+animation = &"aim"
+
+[node name="PlayerArea" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, -44.5)
+scale = Vector2(1.72973, 1.77778)
+shape = SubResource("RectangleShape2D_4a666")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+script = SubResource("GDScript_rvhuh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-2.5946, -15.5555)
+shape = SubResource("RectangleShape2D_14ew1")
+debug_color = Color(0.966631, 0.173992, 0.148345, 0.42)
+
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="GridContainer" parent="PlayerHUD"]
+clip_contents = true
+custom_minimum_size = Vector2(129, 50)
+offset_left = 10.0
+offset_top = 16.0
+offset_right = 139.0
+offset_bottom = 66.0
+columns = 4
+script = ExtResource("8_ymoqd")
+metadata/_edit_use_anchors_ = true
+
+[node name="PizzaBow" parent="." instance=ExtResource("4_g3nvv")]
+position = Vector2(42, -37)
+scale = Vector2(1.63672, 1.49512)
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_8spdh")
+
+[node name="PizzaBullet" parent="." instance=ExtResource("15_jw1be")]
+
+[connection signal="damage_received" from="." to="PlayerHUD/HealthBar" method="_on_player_damage_received"]
+[connection signal="health_received" from="." to="PlayerHUD/HealthBar" method="_on_player_health_received"]
+[connection signal="picked_pizza_gun" from="." to="PizzaBow" method="_on_player_picked_pizza_gun"]
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

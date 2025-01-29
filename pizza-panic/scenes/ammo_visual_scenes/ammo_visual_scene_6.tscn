@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://mhm1a28vr07y"]
+
+[ext_resource type="Texture2D" uid="uid://cgf0ul7536j5j" path="res://props/HUDSprites/slice_6.png" id="1_wtgcc"]
+
+[node name="AmmoVisualScene6" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_wtgcc")
+expand_mode = 1
+stretch_mode = 2

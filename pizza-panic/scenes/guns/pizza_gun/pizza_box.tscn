@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://binksui7y0pq"]
+
+[ext_resource type="Texture2D" uid="uid://edo7twdteshi" path="res://props/GunSprites/pizza_box.png" id="1_j6tht"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_gun/pizza_box.gd" id="2_6255q"]
+[ext_resource type="AudioStream" uid="uid://dhopv81stc5vi" path="res://music/item_pickup.mp3" id="3_cwy4w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rcsq0"]
+size = Vector2(385, 430)
+
+[node name="PizzaBox" type="Sprite2D"]
+scale = Vector2(0.23, 0.23)
+texture = ExtResource("1_j6tht")
+script = ExtResource("2_6255q")
+
+[node name="PickUpArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+position = Vector2(-7.49999, -4.99999)
+shape = SubResource("RectangleShape2D_rcsq0")
+
+[node name="PickUpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_cwy4w")

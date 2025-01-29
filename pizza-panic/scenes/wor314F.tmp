@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=3 uid="uid://cl0kcmfaxjjmv"]
+
+[ext_resource type="Script" path="res://scenes/world.gd" id="1_uc0q8"]
+[ext_resource type="PackedScene" uid="uid://bhpx5t0uvd065" path="res://scenes/player/player.tscn" id="2_qr6hw"]
+[ext_resource type="PackedScene" uid="uid://blk2vqy5bk8km" path="res://scenes/guns/pizza_bow_sprite.tscn" id="3_pxtqp"]
+[ext_resource type="PackedScene" uid="uid://bo5gryw37ss33" path="res://scenes/enemies/enemy.tscn" id="3_rnmd7"]
+[ext_resource type="PackedScene" uid="uid://d2lwteap0h55i" path="res://scenes/enemies/small_enemy.tscn" id="5_hr0iu"]
+[ext_resource type="PackedScene" uid="uid://dnkcfdsgms67y" path="res://scenes/guns/pizza_gun_sprite.tscn" id="6_53ivi"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_lo2g8"]
+size = Vector2(1000, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1tvs8"]
+size = Vector2(1000, 100)
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_uc0q8")
+
+[node name="Player" parent="." instance=ExtResource("2_qr6hw")]
+position = Vector2(-579, 197)
+
+[node name="PizzaBowSprite" parent="." instance=ExtResource("3_pxtqp")]
+position = Vector2(-337, 290)
+
+[node name="Enemy" parent="." instance=ExtResource("3_rnmd7")]
+position = Vector2(443, 161)
+
+[node name="Platforms" type="Node" parent="."]
+
+[node name="Platform" type="StaticBody2D" parent="Platforms"]
+position = Vector2(-470, 450)
+scale = Vector2(0.4, 2)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(626, 399)
+scale = Vector2(0.5, 3)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform2"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform2"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(-716, 146)
+rotation = 1.5708
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform3"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform3"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform4" type="StaticBody2D" parent="Platforms"]
+position = Vector2(825, 599)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform4"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform4"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform5" type="StaticBody2D" parent="Platforms"]
+position = Vector2(-166, 599)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform5"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform5"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform6" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2269, 109)
+rotation = 1.5708
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform6"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform6"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="Platform7" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1820, 599)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Platforms/Platform7"]
+modulate = Color(0, 1, 1, 1)
+mesh = SubResource("QuadMesh_lo2g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform7"]
+shape = SubResource("RectangleShape2D_1tvs8")
+
+[node name="SmallEnemy" parent="." instance=ExtResource("5_hr0iu")]
+position = Vector2(-14, 471)
+
+[node name="PizzaGunSprite" parent="." instance=ExtResource("6_53ivi")]
+position = Vector2(-222, 293)
+
+[connection signal="_bow_pick_up" from="PizzaBowSprite" to="Player" method="_on_pizza_bow_sprite__bow_pick_up"]
+[connection signal="stepped_on_head" from="Enemy" to="Player" method="_on_enemy_stepped_on_head"]
+[connection signal="stepped_on_small_head" from="SmallEnemy" to="Player" method="_on_small_enemy_stepped_on_small_head"]
+[connection signal="_gun_pick_up" from="PizzaGunSprite" to="Player" method="_on_pizza_gun_sprite__gun_pick_up"]

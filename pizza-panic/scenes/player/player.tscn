@@ -1,0 +1,364 @@
+[gd_scene load_steps=36 format=3 uid="uid://bhpx5t0uvd065"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_p2rcf"]
+[ext_resource type="Texture2D" uid="uid://mn8gq88r42sq" path="res://props/red_screen.png" id="3_40vgb"]
+[ext_resource type="Shader" path="res://scenes/player/player.gdshader" id="3_66bh8"]
+[ext_resource type="Texture2D" uid="uid://b2wvqsc3pbp6g" path="res://props/PlayerSprites/ChefSheet -Idle_0.png" id="3_ybu3f"]
+[ext_resource type="Texture2D" uid="uid://dcmx05d2i5r75" path="res://props/PlayerSprites/ChefSheet - Aim.png" id="3_yyvui"]
+[ext_resource type="Texture2D" uid="uid://c7ggg5xj5oby1" path="res://props/PlayerSprites/ChefSheet - Walking_0.png" id="4_5cjbh"]
+[ext_resource type="Texture2D" uid="uid://1fnr8mwvc07b" path="res://props/PlayerSprites/ChefSheet -Idle_1.png" id="4_52bxl"]
+[ext_resource type="Texture2D" uid="uid://10rlcmpg3qn6" path="res://props/PlayerSprites/ChefSheet - Aim_0.png" id="4_atwer"]
+[ext_resource type="PackedScene" uid="uid://cxswrlguolfr8" path="res://scenes/guns/pizza_bow/pizza_bow.tscn" id="4_g3nvv"]
+[ext_resource type="Texture2D" uid="uid://dp28mkwunm2mm" path="res://props/PlayerSprites/ChefSheet - Jump.png" id="4_qqfmw"]
+[ext_resource type="AudioStream" uid="uid://dgx4v62dnskrj" path="res://music/game_over.mp3" id="5_8spdh"]
+[ext_resource type="Texture2D" uid="uid://doepvwecerg36" path="res://props/PlayerSprites/ChefSheet - Walking_1.png" id="5_t7iom"]
+[ext_resource type="Texture2D" uid="uid://bn8ic0kpwkjgq" path="res://props/PlayerSprites/ChefSheet - Aim_1.png" id="5_xg540"]
+[ext_resource type="Texture2D" uid="uid://03nset7p4y8y" path="res://props/PlayerSprites/ChefSheet - Walking_2.png" id="6_pcq7x"]
+[ext_resource type="Texture2D" uid="uid://c3frd7k4fyvy5" path="res://props/PlayerSprites/ChefSheet - Walking_3.png" id="7_8wxqq"]
+[ext_resource type="Texture2D" uid="uid://b41oqnxe705ii" path="res://props/PlayerSprites/ChefSheet - Attack.png" id="7_lwdu8"]
+[ext_resource type="Texture2D" uid="uid://dtlomc5pibjff" path="res://props/PlayerSprites/ChefSheet - Dash_0.png" id="8_1317p"]
+[ext_resource type="Script" path="res://scenes/player/health_bar.gd" id="8_ymoqd"]
+[ext_resource type="Texture2D" uid="uid://cwcl43hiay18l" path="res://props/PlayerSprites/ChefSheet -Dead.png" id="9_fr1gy"]
+[ext_resource type="Texture2D" uid="uid://b88rcc52uhxt8" path="res://props/PlayerSprites/ChefSheet - Fall.png" id="9_tiphp"]
+[ext_resource type="PackedScene" uid="uid://bdjyp2uqrkk4" path="res://scenes/guns/pizza_gun/pizza_gun.tscn" id="18_62g30"]
+[ext_resource type="FontFile" uid="uid://evu3isgi50y" path="res://fonts/PixelatedEleganceRegular-ovyAA.ttf" id="19_dch02"]
+[ext_resource type="AudioStream" uid="uid://d11rf1bif68np" path="res://music/pizza_cutter.mp3" id="22_1r2ug"]
+[ext_resource type="PackedScene" uid="uid://btux2lrhuy3ct" path="res://scenes/guns/pizza_bazooka/pizza_bazooka.tscn" id="24_np7tt"]
+
+[sub_resource type="GDScript" id="GDScript_ooi0l"]
+script/source = "extends Camera2D
+
+@onready var timer_shake_length = $TimerShakeLength
+@onready var timer_wait_times = $TimerWaitTimes
+@onready var flash_image = $FlashSprite
+
+var reset_speed = 0
+var strength = 0
+var doing_shake = false
+var rng = RandomNumberGenerator.new()
+
+func _ready():
+	# Connect timer signal timeouts
+	timer_wait_times.timeout.connect(_on_timer_wait_times_timeout)
+	timer_shake_length.timeout.connect(_on_timer_shake_length_timeout)
+
+# Stop the shake and reset the camera's offset
+func _on_timer_shake_length_timeout():
+	doing_shake = false
+	reset_camera()
+
+# Perform the tween shake during intervals
+func _on_timer_wait_times_timeout():
+	if doing_shake:
+		var tween_shake = create_tween()
+		tween_shake.parallel().tween_property(
+			self,
+			\"offset\",
+			Vector2(rng.randf_range(-strength, strength), rng.randf_range(-strength, strength)),
+			reset_speed
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+		tween_shake.play()
+
+# Reset the camera's offset smoothly after shaking
+func reset_camera():
+	var tween_shake = create_tween()
+	tween_shake.tween_property(
+		self,
+		\"offset\",
+		Vector2.ZERO,
+		reset_speed
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween_shake.play()
+
+# Start the shake with specified parameters
+func start_shake(time_of_shake, speed_of_shake, strength_of_shake):
+	doing_shake = true
+	strength = strength_of_shake
+	reset_speed = speed_of_shake
+	timer_shake_length.start(time_of_shake)
+	timer_wait_times.start(speed_of_shake)
+
+# Start a flash effect by tweening the alpha channel of `flash_image`
+func start_flash(speed, strength):
+	var tween_flash = create_tween()
+
+	# Fade alpha up
+	tween_flash.set_speed_scale(speed)
+	tween_flash.tween_property(
+		flash_image,
+		\"modulate:a\",
+		0.0,
+		strength,
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+
+	# Wait for the duration and fade alpha down
+	tween_flash.set_speed_scale(speed)
+	tween_flash.parallel().tween_property(
+		flash_image,
+		\"modulate:a\",
+		strength,
+		0.0
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+
+	tween_flash.play()
+"
+
+[sub_resource type="GDScript" id="GDScript_hj644"]
+script/source = "extends Sprite2D
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n7sts"]
+shader = ExtResource("3_66bh8")
+shader_parameter/flash_color = Color(0.87, 0.2523, 0.2523, 1)
+shader_parameter/flash_modifier = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gbxf3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_yyvui")
+}],
+"loop": true,
+"name": &"aim",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_atwer")
+}],
+"loop": true,
+"name": &"aim_0",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_xg540")
+}],
+"loop": true,
+"name": &"aim_1",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_lwdu8")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_1317p")
+}],
+"loop": true,
+"name": &"dash",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_fr1gy")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_tiphp")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ybu3f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_52bxl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_qqfmw")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_5cjbh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_t7iom")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pcq7x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_8wxqq")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4a666"]
+size = Vector2(32.375, 49.4999)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14ew1"]
+size = Vector2(93.4054, 137.333)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5kd4"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 0.713726)
+
+[sub_resource type="Animation" id="Animation_mbv6h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_modifier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_1rc8v"]
+resource_name = "flash"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_modifier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aotjo"]
+_data = {
+"RESET": SubResource("Animation_mbv6h"),
+"flash": SubResource("Animation_1rc8v")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvksk"]
+size = Vector2(56, 10)
+
+[node name="Player" type="CharacterBody2D" groups=["PlayerArea"]]
+position = Vector2(1196, -457)
+floor_max_angle = 0.872665
+floor_snap_length = 10.0
+script = ExtResource("1_p2rcf")
+SPEED = 300.0
+JUMP_VELOCITY = -600.0
+MAX_HEALTH = 4.0
+DASH_SPEED = 1000.0
+dash_duration = 0.2
+dash_cooldown = 1.0
+invicibilty_frames = 0.8
+melee_attack_cooldown = 2.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -154)
+scale = Vector2(0.2, 0.2)
+zoom = Vector2(0.7, 0.7)
+script = SubResource("GDScript_ooi0l")
+
+[node name="FlashSprite" type="Sprite2D" parent="Camera2D"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0.396376, 0.000244141)
+scale = Vector2(-31.416, 30.5044)
+texture = ExtResource("3_40vgb")
+script = SubResource("GDScript_hj644")
+
+[node name="TimerShakeLength" type="Timer" parent="Camera2D"]
+one_shot = true
+
+[node name="TimerWaitTimes" type="Timer" parent="Camera2D"]
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_n7sts")
+position = Vector2(-0.119568, -73)
+scale = Vector2(0.572852, 0.509752)
+sprite_frames = SubResource("SpriteFrames_gbxf3")
+animation = &"walking"
+
+[node name="PlayerArea" type="CollisionShape2D" parent="." groups=["PlayerArea"]]
+position = Vector2(4.00001, -44)
+scale = Vector2(1.72973, 1.77778)
+shape = SubResource("RectangleShape2D_4a666")
+
+[node name="Hitbox" type="Area2D" parent="." groups=["PlayerArea", "PlayerHitbox"]]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(6.91892, -22.4444)
+shape = SubResource("RectangleShape2D_14ew1")
+debug_color = Color(0.966631, 0.173992, 0.148345, 0.42)
+
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="GridContainer" parent="PlayerHUD"]
+clip_contents = true
+offset_left = 2.0
+offset_right = 131.0
+offset_bottom = 50.0
+columns = 4
+script = ExtResource("8_ymoqd")
+metadata/_edit_use_anchors_ = true
+
+[node name="Score" type="Label" parent="PlayerHUD"]
+offset_left = 510.0
+offset_top = 2.0
+offset_right = 815.0
+offset_bottom = 59.0
+theme_override_fonts/font = ExtResource("19_dch02")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_f5kd4")
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PizzaBow" parent="." instance=ExtResource("4_g3nvv")]
+position = Vector2(42, -37)
+scale = Vector2(1.63672, 1.49512)
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_8spdh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../PlayerSprite")
+libraries = {
+"": SubResource("AnimationLibrary_aotjo")
+}
+
+[node name="PizzaGun" parent="." instance=ExtResource("18_62g30")]
+position = Vector2(3, -40)
+
+[node name="Feet" type="Area2D" parent="." groups=["PlayerArea", "PlayerFeet"]]
+position = Vector2(4, -0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Feet"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_uvksk")
+debug_color = Color(0, 0.633999, 0.434095, 0.42)
+
+[node name="CutSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("22_1r2ug")
+
+[node name="PizzaBazooka" parent="." instance=ExtResource("24_np7tt")]
+position = Vector2(15, -49)
+scale = Vector2(0.2, 0.2)

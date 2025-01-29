@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyi6slefayxu4"]
+
+[ext_resource type="Texture2D" uid="uid://b35fhyy1g43tc" path="res://props/GunSprites/quiver.png" id="1_bifwk"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bow/quiver.gd" id="2_t2q5m"]
+[ext_resource type="AudioStream" uid="uid://dhopv81stc5vi" path="res://music/item_pickup.mp3" id="3_r7rs0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1u3j4"]
+radius = 119.853
+height = 655.87
+
+[node name="Quiver" type="Sprite2D"]
+position = Vector2(3, 0)
+scale = Vector2(0.151667, 0.173333)
+texture = ExtResource("1_bifwk")
+script = ExtResource("2_t2q5m")
+
+[node name="PickUpArea" type="Area2D" parent="."]
+position = Vector2(874.528, 639.474)
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+position = Vector2(-940.462, -633.704)
+rotation = -0.747001
+shape = SubResource("CapsuleShape2D_1u3j4")
+
+[node name="PickUpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_r7rs0")

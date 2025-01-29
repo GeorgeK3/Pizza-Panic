@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://blk2vqy5bk8km"]
+
+[ext_resource type="Texture2D" uid="uid://1f6bm55xjjv5" path="res://props/GunSprites/pizza_bow.png" id="1_femrk"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bow/pizza_bow_sprite.gd" id="2_4gtct"]
+[ext_resource type="AudioStream" uid="uid://btnqvooayg2hd" path="res://music/Upgrade Sound Effect.mp3" id="3_dj5g1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_23b28"]
+radius = 9.0
+height = 34.0
+
+[node name="PizzaBowSprite" type="Sprite2D"]
+position = Vector2(0, -9.53674e-07)
+scale = Vector2(1.8125, 1.90625)
+texture = ExtResource("1_femrk")
+script = ExtResource("2_4gtct")
+metadata/_edit_group_ = true
+
+[node name="PickUpArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+position = Vector2(-2, 0)
+shape = SubResource("CapsuleShape2D_23b28")
+
+[node name="PickUpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_dj5g1")

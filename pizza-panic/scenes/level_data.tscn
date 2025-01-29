@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://bptxobp0435vf"]
+
+[sub_resource type="GDScript" id="GDScript_4a3my"]
+script/source = "extends Node
+
+
+var level_dic = {
+	\"Level1\":{
+		\"unlocked\" : true,
+		\"score\" : 0,
+		\"max_score\" : 0,
+		\"damage_taken\" : 0,
+		\"unlocks\" : \"Level2\",
+		\"beaten\" : false
+	}
+}
+
+func generate_level(level : String):
+	if level not in level_dic:
+		level_dic[level]={
+			\"unlocked\" : false,
+			\"score\" : 0,
+			\"max_score\" : 0,
+			\"damage_taken\" : 0,
+			\"unlocks\" : generate_level_number(level),
+			\"beaten\" : false
+		}
+
+func generate_level_number(level: String):
+	var level_number = \"\"
+	for character in level:
+		if character.is_valid_int():
+			level_number += character
+	level_number = int(level_number) + 1
+	return \"Level\" + str(level_number)
+
+func update_level(level : String,score : int,max_score : int,damage_taken : int,beaten : bool):
+	level_dic[level][\"score\"] = score
+	level_dic[level][\"max_score\"] = max_score
+	level_dic[level][\"damage_taken\"] = damage_taken
+	level_dic[level][\"beaten\"] = beaten
+"
+
+[node name="LevelData" type="Node"]
+script = SubResource("GDScript_4a3my")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1tc4pys801t0"]
+
+[ext_resource type="Script" path="res://scenes/guns/pizza_gun/pizza_bullet.gd" id="1_e2ljm"]
+[ext_resource type="Texture2D" uid="uid://c4c8foim4asx1" path="res://props/GunSprites/pizza_bullet.png" id="2_4s8bo"]
+
+[node name="PizzaBullet" type="Area2D" groups=["PizzaBullets"]]
+script = ExtResource("1_e2ljm")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-0.999999, 1)
+rotation = -1.5708
+scale = Vector2(0.225901, 0.232395)
+texture = ExtResource("2_4s8bo")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-11, 10)
+scale = Vector2(0.236645, 0.227794)
+polygon = PackedVector2Array(-3.90736, 22.815, 10.7453, 22.815, 115.267, -28.7667, 115.267, -53.5655, 8.79158, -106.139, -3.90736, -106.139, -19.5368, -81.3403, -27.3516, -64.477, -27.3516, -17.8552, -20.5137, -1.98391)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-1, 1.00001)
+scale = Vector2(1.73931, 1.50863)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

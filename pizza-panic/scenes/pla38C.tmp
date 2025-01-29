@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://bhpx5t0uvd065"]
+
+[ext_resource type="Texture2D" uid="uid://dgqpxicmh1eef" path="res://icon.svg" id="1_mwsv4"]
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_p2rcf"]
+[ext_resource type="Texture2D" uid="uid://1f6bm55xjjv5" path="res://gun.png" id="3_stu23"]
+[ext_resource type="Script" path="res://scenes/gun.gd" id="4_ul4vq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4a666"]
+size = Vector2(40.4688, 38.8125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14ew1"]
+size = Vector2(394.378, 90.6667)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_p2rcf")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+texture = ExtResource("1_mwsv4")
+
+[node name="PlayerArea" type="CollisionShape2D" parent="."]
+position = Vector2(-1.19209e-07, -35.5)
+scale = Vector2(1.72973, 1.77778)
+shape = SubResource("RectangleShape2D_4a666")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(22.4865, -15.1111)
+shape = SubResource("RectangleShape2D_14ew1")
+
+[node name="Gun" type="Sprite2D" parent="."]
+position = Vector2(49, -31)
+scale = Vector2(1.375, 1.28125)
+texture = ExtResource("3_stu23")
+script = ExtResource("4_ul4vq")
+
+[node name="Marker2D" type="Marker2D" parent="Gun"]
+position = Vector2(16.571, 11)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -154)
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_area_2d_body_entered"]
+[connection signal="refill_ammo" from="Gun" to="." method="_on_gun_refill_ammo"]
+[connection signal="use_ammo" from="Gun" to="." method="_on_gun_use_ammo"]
+[connection signal="use_reserve_ammo" from="Gun" to="." method="_on_gun_use_reserve_ammo"]

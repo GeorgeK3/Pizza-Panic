@@ -1,0 +1,148 @@
+[gd_scene load_steps=17 format=3 uid="uid://bo5gryw37ss33"]
+
+[ext_resource type="Script" path="res://scenes/enemies/burger_enemies/big_enemy/enemy.gd" id="1_wjbif"]
+[ext_resource type="Shader" path="res://scenes/enemies/burger_enemies/big_enemy/enemy.gdshader" id="2_cung0"]
+[ext_resource type="Texture2D" uid="uid://dn4rx0dpbgmuy" path="res://props/EnemySprites/Enemy_0.png" id="2_rxphr"]
+[ext_resource type="Texture2D" uid="uid://dv6oeb2qbm13h" path="res://props/EnemySprites/Enemy_1.png" id="3_xebvd"]
+[ext_resource type="Texture2D" uid="uid://cv5scuec4v4p4" path="res://props/EnemySprites/Enemy_2.png" id="4_42oxt"]
+[ext_resource type="Texture2D" uid="uid://c7trnvcyuppro" path="res://props/EnemySprites/Enemy_3.png" id="5_r7eyu"]
+[ext_resource type="AudioStream" uid="uid://cb04enywbw65w" path="res://music/monster-death-grunt.mp3" id="7_fwhia"]
+[ext_resource type="PackedScene" uid="uid://d17nmwiua56af" path="res://scenes/enemies/burger_enemies/big_enemy/enemy_gun.tscn" id="8_y36qs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uvx8"]
+shader = ExtResource("2_cung0")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_modifier = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tdqfv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rxphr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_xebvd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_42oxt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_r7eyu")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ksht4"]
+size = Vector2(42, 115)
+
+[sub_resource type="Animation" id="Animation_fvfrw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_modifier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_c0hhh"]
+resource_name = "flash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/flash_modifier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mcrim"]
+_data = {
+"RESET": SubResource("Animation_fvfrw"),
+"flash": SubResource("Animation_c0hhh")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xdkvx"]
+radius = 40.0
+height = 112.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i6c3a"]
+radius = 16.0
+height = 58.0
+
+[node name="Enemy" type="CharacterBody2D"]
+floor_max_angle = 0.872665
+floor_snap_length = 20.0
+script = ExtResource("1_wjbif")
+SPEED = 300.0
+hitpoints = 4
+
+[node name="EnemySprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_4uvx8")
+position = Vector2(0, 1.5)
+scale = Vector2(1, 1.02083)
+sprite_frames = SubResource("SpriteFrames_tdqfv")
+animation = &"moving"
+frame_progress = 0.915452
+
+[node name="EnemySprite2" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_4uvx8")
+position = Vector2(0, 1.5)
+scale = Vector2(1, 1.02083)
+sprite_frames = SubResource("SpriteFrames_tdqfv")
+animation = &"moving"
+frame_progress = 0.915452
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 17.5)
+shape = SubResource("RectangleShape2D_ksht4")
+
+[node name="RayCast2D_Wall" type="RayCast2D" parent="."]
+target_position = Vector2(39, 0)
+
+[node name="RayCast2D_Fall" type="RayCast2D" parent="."]
+position = Vector2(22, -1)
+target_position = Vector2(0, 176)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../EnemySprite")
+libraries = {
+"": SubResource("AnimationLibrary_mcrim")
+}
+
+[node name="HitBox" type="Area2D" parent="." groups=["Enemies"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(0, 14)
+shape = SubResource("CapsuleShape2D_xdkvx")
+debug_color = Color(0.962846, 0.185622, 0.141733, 0.42)
+
+[node name="HeadHitBox" type="Area2D" parent="." groups=["Enemies", "EnemyHeadsArea"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeadHitBox"]
+position = Vector2(0, -30)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_i6c3a")
+debug_color = Color(0.818828, 0.00183494, 0.968861, 0.42)
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_fwhia")
+
+[node name="EnemyGun" parent="." instance=ExtResource("8_y36qs")]
+position = Vector2(4, 39)
+scale = Vector2(0.55, 0.55)
+
+[connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered"]
+[connection signal="area_entered" from="HeadHitBox" to="." method="_on_head_hit_box_area_entered"]

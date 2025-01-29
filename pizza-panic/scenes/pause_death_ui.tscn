@@ -1,0 +1,164 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci8louk3ycokh"]
+
+[ext_resource type="Script" path="res://scenes/pause_death_ui.gd" id="1_1ouev"]
+[ext_resource type="FontFile" uid="uid://evu3isgi50y" path="res://fonts/PixelatedEleganceRegular-ovyAA.ttf" id="1_4mcge"]
+
+[node name="PAUSE_UI" type="CanvasLayer"]
+script = ExtResource("1_1ouev")
+
+[node name="Pause" type="CanvasLayer" parent="."]
+process_mode = 2
+
+[node name="pause_ui" type="ColorRect" parent="Pause"]
+process_mode = 2
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.188235)
+
+[node name="PauseTitle" type="Label" parent="Pause/pause_ui"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -122.0
+offset_top = 111.0
+offset_right = 122.0
+offset_bottom = 156.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 50
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="Pause/pause_ui"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -165.5
+offset_top = -191.5
+offset_right = 165.5
+offset_bottom = 191.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause/pause_ui/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_top = 31.0
+offset_right = -33.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="CONTINUE" type="Button" parent="Pause/pause_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "CONTINUE"
+
+[node name="RESTART" type="Button" parent="Pause/pause_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "RESTART"
+
+[node name="BACK TO MAP" type="Button" parent="Pause/pause_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "MAP"
+
+[node name="MENU" type="Button" parent="Pause/pause_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "MENU"
+
+[node name="Died" type="CanvasLayer" parent="."]
+
+[node name="died_ui" type="ColorRect" parent="Died"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.188235)
+
+[node name="DiedTitle" type="Label" parent="Died/died_ui"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -122.0
+offset_top = 111.0
+offset_right = 122.0
+offset_bottom = 156.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 50
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="Died/died_ui"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -165.5
+offset_top = -191.5
+offset_right = 165.5
+offset_bottom = 191.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Died/died_ui/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_top = 31.0
+offset_right = -33.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="MAP" type="Button" parent="Died/died_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "CONTINUE"
+
+[node name="MENU" type="Button" parent="Died/died_ui/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_4mcge")
+theme_override_font_sizes/font_size = 30
+text = "MENU"
+
+[connection signal="pressed" from="Pause/pause_ui/Panel/VBoxContainer/CONTINUE" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="Pause/pause_ui/Panel/VBoxContainer/RESTART" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Pause/pause_ui/Panel/VBoxContainer/BACK TO MAP" to="." method="_on_back_to_map_pressed"]
+[connection signal="pressed" from="Pause/pause_ui/Panel/VBoxContainer/MENU" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Died/died_ui/Panel/VBoxContainer/MAP" to="." method="_on_map_pressed"]
+[connection signal="pressed" from="Died/died_ui/Panel/VBoxContainer/MENU" to="." method="_on_menu_pressed"]

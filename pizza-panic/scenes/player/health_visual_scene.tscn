@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyxjyh8iu4d6o"]
+
+[ext_resource type="Texture2D" uid="uid://djwjvkh1vm4ox" path="res://props/HUDSprites/pizza_heart.png" id="1_5d55f"]
+
+[node name="HealthVisualScene" type="TextureRect"]
+offset_right = 65.0
+offset_bottom = 61.0
+texture = ExtResource("1_5d55f")

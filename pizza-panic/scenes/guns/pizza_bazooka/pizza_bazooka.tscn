@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://btux2lrhuy3ct"]
+
+[ext_resource type="Texture2D" uid="uid://dodcxjybpq580" path="res://props/GunSprites/pizza_bazooka.png" id="1_waev0"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bazooka/pizza_bazooka.gd" id="2_4lamt"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bazooka/bazooka_ammo_count.gd" id="3_qg55n"]
+[ext_resource type="FontFile" uid="uid://c213v1f8ryp2e" path="res://fonts/Pizzanumbersfont-Regular.ttf" id="3_vlnns"]
+[ext_resource type="Texture2D" uid="uid://dnf1o1mhmnapi" path="res://props/GunSprites/pizza_rocket.png" id="4_uc7qf"]
+[ext_resource type="AudioStream" uid="uid://duw7vnaj7tner" path="res://music/Bazooka_shoot.mp3" id="6_vmf6o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1vrfp"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 0.713726)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h73ht"]
+bg_color = Color(0.702173, 0.209542, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="PizzaBazooka" type="Sprite2D"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_waev0")
+script = ExtResource("2_4lamt")
+reload_timer = 4.0
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(336.667, -6.66667)
+
+[node name="PizzaBazookaHUD" type="CanvasLayer" parent="."]
+
+[node name="BazookaAmmoCount" type="Label" parent="PizzaBazookaHUD"]
+offset_left = 1224.0
+offset_top = 53.0
+offset_right = 1321.0
+offset_bottom = 103.0
+theme_override_fonts/font = ExtResource("3_vlnns")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_1vrfp")
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_qg55n")
+
+[node name="ReloadingBar" type="ProgressBar" parent="PizzaBazookaHUD"]
+offset_left = 585.0
+offset_top = 660.0
+offset_right = 735.0
+offset_bottom = 690.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_h73ht")
+value = 50.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="PizzaBazookaHUD/ReloadingBar"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = -1.0
+offset_right = 149.0
+offset_bottom = 30.0
+text = "Reloading..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RocketsDisplay" type="GridContainer" parent="PizzaBazookaHUD"]
+offset_left = 1110.0
+offset_top = 120.0
+offset_right = 1314.0
+offset_bottom = 207.0
+rotation = -1.0472
+scale = Vector2(0.6, 0.6)
+
+[node name="TextureRect" type="TextureRect" parent="PizzaBazookaHUD/RocketsDisplay"]
+layout_mode = 2
+texture = ExtResource("4_uc7qf")
+
+[node name="BazookaSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_vmf6o")

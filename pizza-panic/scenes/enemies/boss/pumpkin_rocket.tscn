@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dijemprd3gtqo"]
+
+[ext_resource type="Texture2D" uid="uid://c3wx31f4bchqi" path="res://props/GunSprites/pumpin_rocket.png" id="1_o4qly"]
+[ext_resource type="Script" path="res://scenes/enemies/boss/pumpik_rocket.gd" id="2_wti1b"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jhh8a"]
+radius = 43.2897
+
+[node name="PumpikRocket" type="Sprite2D"]
+texture = ExtResource("1_o4qly")
+script = ExtResource("2_wti1b")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(52, 2)
+shape = SubResource("CircleShape2D_jhh8a")
+debug_color = Color(0.702555, 0.49068, 0, 0.42)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

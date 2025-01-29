@@ -1,0 +1,101 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhpx5t0uvd065"]
+
+[ext_resource type="Texture2D" uid="uid://dgqpxicmh1eef" path="res://icon.svg" id="1_mwsv4"]
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_p2rcf"]
+[ext_resource type="Texture2D" uid="uid://1f6bm55xjjv5" path="res://gun.png" id="3_stu23"]
+[ext_resource type="Script" path="res://scenes/gun.gd" id="4_ul4vq"]
+[ext_resource type="Script" path="res://scenes/ammo_display.gd" id="5_6yayq"]
+[ext_resource type="FontFile" uid="uid://c213v1f8ryp2e" path="res://Pizzanumbersfont-Regular.ttf" id="6_ed1rr"]
+[ext_resource type="Script" path="res://scenes/ammo_count.gd" id="7_v7mhi"]
+[ext_resource type="Script" path="res://scenes/health_bar.gd" id="8_ymoqd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4a666"]
+size = Vector2(40.4688, 38.8125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14ew1"]
+size = Vector2(122.811, 113.778)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_p2rcf")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+texture = ExtResource("1_mwsv4")
+
+[node name="PlayerArea" type="CollisionShape2D" parent="."]
+position = Vector2(-1.19209e-07, -35.5)
+scale = Vector2(1.72973, 1.77778)
+shape = SubResource("RectangleShape2D_4a666")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(-1.90735e-06, -36)
+scale = Vector2(0.578125, 0.5625)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-0.864868, -3.55556)
+shape = SubResource("RectangleShape2D_14ew1")
+
+[node name="PizzaGun" type="Sprite2D" parent="."]
+position = Vector2(49, -31)
+scale = Vector2(1.375, 1.28125)
+texture = ExtResource("3_stu23")
+script = ExtResource("4_ul4vq")
+
+[node name="Marker2D" type="Marker2D" parent="PizzaGun"]
+position = Vector2(16.571, 11)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -154)
+
+[node name="GunHUD" type="CanvasLayer" parent="."]
+
+[node name="AmmoDisplay" type="GridContainer" parent="GunHUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1089.0
+offset_top = -715.0
+offset_right = 1239.0
+offset_bottom = -565.0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+size_flags_stretch_ratio = 10.0
+columns = 6
+script = ExtResource("5_6yayq")
+metadata/_edit_use_anchors_ = true
+
+[node name="AmmoCount" type="Label" parent="GunHUD"]
+anchors_preset = -1
+anchor_left = -0.00757576
+anchor_right = -0.00757576
+offset_left = 1233.0
+offset_top = 43.0
+offset_right = 1330.0
+offset_bottom = 83.0
+theme_override_fonts/font = ExtResource("6_ed1rr")
+theme_override_font_sizes/font_size = 40
+script = ExtResource("7_v7mhi")
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="GridContainer" parent="PlayerHUD"]
+clip_contents = true
+custom_minimum_size = Vector2(129, 50)
+offset_left = 10.0
+offset_top = 16.0
+offset_right = 139.0
+offset_bottom = 66.0
+columns = 4
+script = ExtResource("8_ymoqd")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="damage_received" from="." to="PlayerHUD/HealthBar" method="_on_player_damage_received"]
+[connection signal="health_received" from="." to="PlayerHUD/HealthBar" method="_on_player_health_received"]
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_area_2d_body_entered"]
+[connection signal="refill_ammo" from="PizzaGun" to="GunHUD/AmmoDisplay" method="_on_gun_refill_ammo"]
+[connection signal="use_ammo" from="PizzaGun" to="GunHUD/AmmoDisplay" method="_on_gun_use_ammo"]
+[connection signal="use_reserve_ammo" from="PizzaGun" to="GunHUD/AmmoCount" method="_on_gun_use_reserve_ammo"]

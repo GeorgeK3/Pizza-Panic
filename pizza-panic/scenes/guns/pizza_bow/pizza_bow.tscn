@@ -1,0 +1,98 @@
+[gd_scene load_steps=13 format=3 uid="uid://cxswrlguolfr8"]
+
+[ext_resource type="Texture2D" uid="uid://b670audut7yvh" path="res://props/GunSprites/pizza_bow_0.png" id="1_4hr75"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bow/pizza_bow.gd" id="1_7omdn"]
+[ext_resource type="Texture2D" uid="uid://c65excf50yixb" path="res://props/GunSprites/pizza_bow_2.png" id="1_qxefb"]
+[ext_resource type="Texture2D" uid="uid://bhtllrjfjbx3o" path="res://props/GunSprites/pizza_bow_1.png" id="2_x4qtt"]
+[ext_resource type="Texture2D" uid="uid://coco18du2ks65" path="res://props/GunSprites/pizza_bow_0.5.png" id="4_x82d7"]
+[ext_resource type="FontFile" uid="uid://c213v1f8ryp2e" path="res://fonts/Pizzanumbersfont-Regular.ttf" id="5_mthwb"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bow/ammo_count.gd" id="6_0qhr8"]
+[ext_resource type="Texture2D" uid="uid://bfjm04ajy25v1" path="res://props/GunSprites/pizza_arrow.png" id="8_ngevx"]
+[ext_resource type="AudioStream" uid="uid://w136fp4youfn" path="res://music/arrow-shoot.mp3" id="9_ox80m"]
+[ext_resource type="AudioStream" uid="uid://d2ovr547jdx2m" path="res://music/bow-loading.mp3" id="9_ykmoo"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wgkgy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qxefb")
+}],
+"loop": true,
+"name": &"full_charged",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_x4qtt")
+}],
+"loop": true,
+"name": &"half_charged",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_4hr75")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_x82d7")
+}],
+"loop": true,
+"name": &"started_charge",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ca1t2"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 0.713726)
+
+[node name="PizzaBow" type="AnimatedSprite2D"]
+position = Vector2(0.5, 4.25)
+scale = Vector2(1.9375, 1.67188)
+sprite_frames = SubResource("SpriteFrames_wgkgy")
+animation = &"full_charged"
+script = ExtResource("1_7omdn")
+firerate = 0.3
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(22.9677, -1.34579)
+scale = Vector2(1.375, 1.28125)
+
+[node name="PizzaBowHUD" type="CanvasLayer" parent="."]
+
+[node name="BowAmmoCount" type="Label" parent="PizzaBowHUD"]
+anchors_preset = -1
+anchor_left = -0.00757576
+anchor_right = -0.00757576
+offset_left = 1233.0
+offset_top = 43.0
+offset_right = 1330.0
+offset_bottom = 93.0
+theme_override_fonts/font = ExtResource("5_mthwb")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_ca1t2")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_0qhr8")
+metadata/_edit_use_anchors_ = true
+
+[node name="PizzaArrowDisplay" type="GridContainer" parent="PizzaBowHUD"]
+offset_left = 1120.0
+offset_top = 95.0
+offset_right = 1466.0
+offset_bottom = 253.0
+rotation = -0.872665
+scale = Vector2(0.35, 0.35)
+
+[node name="TextureRect" type="TextureRect" parent="PizzaBowHUD/PizzaArrowDisplay"]
+layout_mode = 2
+texture = ExtResource("8_ngevx")
+
+[node name="Arrow" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_ox80m")
+
+[node name="Bow" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_ykmoo")

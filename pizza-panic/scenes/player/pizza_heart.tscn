@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyjqlu2t0y5mm"]
+
+[ext_resource type="Texture2D" uid="uid://djwjvkh1vm4ox" path="res://props/HUDSprites/pizza_heart.png" id="1_6or0i"]
+[ext_resource type="Script" path="res://scenes/player/pizza_heart.gd" id="2_py086"]
+[ext_resource type="AudioStream" uid="uid://dhopv81stc5vi" path="res://music/item_pickup.mp3" id="3_hsmc8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mpmib"]
+radius = 31.0644
+
+[node name="PizzaHeart" type="Sprite2D"]
+texture = ExtResource("1_6or0i")
+script = ExtResource("2_py086")
+
+[node name="PickUpArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickUpArea"]
+shape = SubResource("CircleShape2D_mpmib")
+
+[node name="PickUpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_hsmc8")

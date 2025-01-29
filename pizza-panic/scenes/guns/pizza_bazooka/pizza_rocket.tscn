@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://cmo660j8d38vf"]
+
+[ext_resource type="Texture2D" uid="uid://dnf1o1mhmnapi" path="res://props/GunSprites/pizza_rocket.png" id="1_733ah"]
+[ext_resource type="Script" path="res://scenes/guns/pizza_bazooka/pizza_rocket.gd" id="1_tk43l"]
+[ext_resource type="AudioStream" uid="uid://ce1mtlfdcmac3" path="res://music/explosion.mp3" id="3_ea63a"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cwbcc"]
+radius = 18.0
+height = 54.0
+
+[sub_resource type="Curve" id="Curve_tf4ih"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sn5si"]
+curve = SubResource("Curve_tf4ih")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5tog1"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 8.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_sn5si")
+color = Color(1, 1, 0.211765, 1)
+collision_mode = 2
+
+[node name="PizzaRocket" type="Area2D"]
+monitorable = false
+script = ExtResource("1_tk43l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_733ah")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(19, 1)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_cwbcc")
+debug_color = Color(0.578412, 0.550981, 0.11551, 0.42)
+
+[node name="Explosion" type="GPUParticles2D" parent="."]
+physics_interpolation_mode = 1
+position = Vector2(41, 1)
+scale = Vector2(5, 5)
+emitting = false
+amount = 200
+process_material = SubResource("ParticleProcessMaterial_5tog1")
+one_shot = true
+explosiveness = 1.0
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_ea63a")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

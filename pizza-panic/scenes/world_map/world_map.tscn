@@ -1,0 +1,165 @@
+[gd_scene load_steps=14 format=3 uid="uid://ppk3xpjowwnf"]
+
+[ext_resource type="Texture2D" uid="uid://cn1dlir8xmt1c" path="res://props/WorldMap/world_map.png" id="1_1ropx"]
+[ext_resource type="Texture2D" uid="uid://b2wvqsc3pbp6g" path="res://props/PlayerSprites/ChefSheet -Idle_0.png" id="1_swsht"]
+[ext_resource type="Script" path="res://scenes/world_map/world_map.gd" id="1_x2oci"]
+[ext_resource type="Texture2D" uid="uid://1fnr8mwvc07b" path="res://props/PlayerSprites/ChefSheet -Idle_1.png" id="2_1xtlf"]
+[ext_resource type="Texture2D" uid="uid://bo17mipt4jct" path="res://props/WorldMap/sea.png" id="2_dt510"]
+[ext_resource type="Texture2D" uid="uid://c5pen1efexg2v" path="res://props/WorldMap/level_beaten.png" id="4_jimtw"]
+[ext_resource type="Texture2D" uid="uid://crvvb3kwnbirl" path="res://props/WorldMap/level_not_beaten.png" id="5_2pt5u"]
+[ext_resource type="Texture2D" uid="uid://gjfeppc2c21" path="res://props/WorldMap/level_locked.png" id="6_om18x"]
+[ext_resource type="AudioStream" uid="uid://r52ear4c2arq" path="res://music/world_map.mp3" id="9_5geaf"]
+[ext_resource type="Script" path="res://scenes/world_map/menu.gd" id="10_55r0k"]
+[ext_resource type="FontFile" uid="uid://evu3isgi50y" path="res://fonts/PixelatedEleganceRegular-ovyAA.ttf" id="10_v7v4q"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xscfo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_swsht")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_1xtlf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5peih"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 0.713726)
+
+[node name="WorldMap" type="Node2D"]
+script = ExtResource("1_x2oci")
+
+[node name="Sea" type="Sprite2D" parent="."]
+scale = Vector2(20, 20)
+texture = ExtResource("2_dt510")
+
+[node name="Map" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_1ropx")
+
+[node name="LevelsHolder" type="Node2D" parent="."]
+
+[node name="Level1" type="Node2D" parent="LevelsHolder"]
+position = Vector2(-837, 1156)
+
+[node name="Beaten" type="Sprite2D" parent="LevelsHolder/Level1"]
+position = Vector2(8, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("4_jimtw")
+
+[node name="NotBeaten" type="Sprite2D" parent="LevelsHolder/Level1"]
+position = Vector2(-2, -2)
+scale = Vector2(2, 2)
+texture = ExtResource("5_2pt5u")
+
+[node name="Locked" type="Sprite2D" parent="LevelsHolder/Level1"]
+position = Vector2(4, 1.5)
+scale = Vector2(2.14815, 2.1375)
+texture = ExtResource("6_om18x")
+
+[node name="Level2" type="Node2D" parent="LevelsHolder"]
+position = Vector2(-823, 485)
+
+[node name="Beaten" type="Sprite2D" parent="LevelsHolder/Level2"]
+position = Vector2(8, -10)
+scale = Vector2(2, 2)
+texture = ExtResource("4_jimtw")
+
+[node name="NotBeaten" type="Sprite2D" parent="LevelsHolder/Level2"]
+position = Vector2(-2, -12)
+scale = Vector2(2, 2)
+texture = ExtResource("5_2pt5u")
+
+[node name="Locked" type="Sprite2D" parent="LevelsHolder/Level2"]
+position = Vector2(3.5, -8)
+scale = Vector2(2.1358, 2.175)
+texture = ExtResource("6_om18x")
+
+[node name="Level3" type="Node2D" parent="LevelsHolder"]
+position = Vector2(-105, -133)
+
+[node name="Beaten" type="Sprite2D" parent="LevelsHolder/Level3"]
+position = Vector2(-2, -4)
+scale = Vector2(2, 2)
+texture = ExtResource("4_jimtw")
+
+[node name="NotBeaten" type="Sprite2D" parent="LevelsHolder/Level3"]
+position = Vector2(-12, -6)
+scale = Vector2(2, 2)
+texture = ExtResource("5_2pt5u")
+
+[node name="Locked" type="Sprite2D" parent="LevelsHolder/Level3"]
+position = Vector2(-6.5, -4)
+scale = Vector2(2.1358, 2.175)
+texture = ExtResource("6_om18x")
+
+[node name="Level4" type="Node2D" parent="LevelsHolder"]
+position = Vector2(647, 162)
+
+[node name="Beaten" type="Sprite2D" parent="LevelsHolder/Level4"]
+position = Vector2(1, -1)
+scale = Vector2(2, 2)
+texture = ExtResource("4_jimtw")
+
+[node name="NotBeaten" type="Sprite2D" parent="LevelsHolder/Level4"]
+position = Vector2(-9, -3)
+scale = Vector2(2, 2)
+texture = ExtResource("5_2pt5u")
+
+[node name="Locked" type="Sprite2D" parent="LevelsHolder/Level4"]
+position = Vector2(-2.5, 0)
+scale = Vector2(2.1358, 2.175)
+texture = ExtResource("6_om18x")
+
+[node name="Player" type="AnimatedSprite2D" parent="."]
+position = Vector2(-840, 1051)
+scale = Vector2(0.8, 0.8)
+sprite_frames = SubResource("SpriteFrames_xscfo")
+animation = &"idle"
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(29, -46)
+zoom = Vector2(0.3, 0.3)
+
+[node name="Menu" type="Button" parent="Player/Camera2D"]
+offset_left = -2750.0
+offset_top = -1500.0
+offset_right = -2559.0
+offset_bottom = -1441.0
+scale = Vector2(2, 2)
+theme_override_fonts/font = ExtResource("10_v7v4q")
+theme_override_font_sizes/font_size = 50
+text = "Menu
+"
+script = ExtResource("10_55r0k")
+
+[node name="Score" type="Label" parent="Player/Camera2D"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -700.0
+offset_top = 1294.0
+offset_right = -125.0
+offset_bottom = 1353.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("10_v7v4q")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_5peih")
+text = "Total Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WorldMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_5geaf")
+autoplay = true
+parameters/looping = true
+
+[connection signal="pressed" from="Player/Camera2D/Menu" to="Player/Camera2D/Menu" method="_on_pressed"]
