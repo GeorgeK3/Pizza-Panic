@@ -1,41 +1,45 @@
-Pizza Panic - Godot Project
+# Pizza Panic - Godot Project
 
-Project Description
+## Project Description
 
--Pizza Panic is a fun and engaging game developed using the Godot Engine. The player embarks on a frantic adventure to  dodge obstacles, and deliver pizzas on his enemies. The game combines fast-paced action.
+Pizza Panic is a fun and engaging game developed using the Godot Engine. In this game, the player embarks on a frantic adventure, dodging obstacles and delivering pizzas to defeat enemies. Combining fast-paced action with humorous gameplay, Pizza Panic challenges players to prove their pizza delivery skills in a chaotic environment.
 
-Features
+> **Note:** The music and sound effects are not included in this project
 
--Fast-Paced Gameplay – Navigate through challenging environments to deliver pizza-justice one your enemies.
+## Features
 
--Multiple Levels – Progress through increasingly difficult levels.
+- **Fast-Paced Gameplay:**  
+  Navigate through challenging environments and deliver pizza-justice upon your enemies.
 
--Score System – Earn points for deliveries and compete for high scores.
+- **Multiple Levels:**  
+  Progress through increasingly difficult levels, each with unique challenges.
 
--Save System – Game progress is saved in save_file.json.
+- **Score System:**  
+  Earn points for successful deliveries and compete for high scores.
 
-Requirements
+- **Save System:**  
+  Your game progress is automatically saved in `save_file.json`, allowing you to resume where you left off.
 
--Godot Engine – Version 3.x or 4.x (ensure compatibility with the project.godot file).
+## Requirements
 
--Operating System – Windows, macOS, or Linux.
+- **Godot Engine:**  
+  Version 3.x or 4.x (ensure compatibility with the `project.godot` file).
 
-Installation and Setup
+- **Operating System:**  
+  Compatible with Windows, macOS, or Linux.
 
--Download and Extract the Project
+## Installation and Setup
 
--Download the ZIP file containing the project.
+1. **Download and Extract the Project:**
+   - Download the ZIP file containing the project.
+   - Extract it to your preferred location.
 
--Extract it to your preferred location.
+2. **Open in Godot:**
+   - Launch the Godot Engine.
+   - Click on "Import" and navigate to the folder containing `project.godot`.
+   - Select `project.godot` and import the project.
 
--Open in Godot
+3. **Run the Project:**
+   - Press `F5` or click on the "Play" button in Godot to run the project.
 
--Launch Godot Engine.
-
--Click on "Import" and navigate to the folder containing project.godot.
-
--Select project.godot and import the project.
-
--Run the Project
-
--Press F5 or click on "Play" to run the project.
+Enjoy playing Pizza Panic and experience the thrill of pizza delivery like never before!
